@@ -6,6 +6,7 @@ on:
       - main
       - staging
       - trying
+      - add-gradle-mitm-cache-debug
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -24,7 +25,12 @@ jobs:
         run: nix build
       - name: Run tests
         # we use 4 extra cores over the 4 cpus, because we are doing a lot of blocking I/O
-        run: nix develop -c pytest -n 8 -s .
+        run: nix develop -c pytest -n 8 -s tests/test_gradle_mitm_cache.py
         env:
           # used by nix-update tests
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: start upterm session
+        if: ${{ inputs.upterm }}
+        uses: owenthereal/action-upterm@v1
+        with:
+          limit-access-to-actor: true
