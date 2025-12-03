@@ -24,7 +24,7 @@ jobs:
       - name: build
         run: nix build
       - name: Allow unprivileged user namespaces
-        run: sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - name: Run tests
         # we use 4 extra cores over the 4 cpus, because we are doing a lot of blocking I/O
         run: nix develop -c pytest -n 8 -s tests/test_gradle_mitm_cache.py
